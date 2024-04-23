@@ -12,6 +12,8 @@
         <link rel="stylesheet" href="css/fontawesome-all.min.css">
         <link rel="stylesheet" href="css/MarkerCluster.css">
         <link rel="stylesheet" href="css/MarkerCluster.Default.css">
+        <link rel="stylesheet" href="css/filter.css">
+<link rel="stylesheet" href="css/nouislider.min.css">
         <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
         <link rel="stylesheet" href="css/leaflet-measure.css">
         <style>
@@ -41,15 +43,18 @@
         <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
         <script src="js/leaflet-measure.js"></script>
         <script src="js/leaflet.markercluster.js"></script>
+        <script src="js/tailDT.js"></script>
+<script src="js/nouislider.min.js"></script>
+<script src="js/wNumb.js"></script>
         <script src="data/CityOutlines_1.js"></script>
-        <script src="data/ProjectbyYear_2.js"></script>
-        <script src="data/ProjectbySize_3.js"></script>
-        <script src="data/ProjectbyVIS_4.js"></script>
-        <script src="data/AmenitiesLocations_5.js"></script>
+        <script src="data/AmenitiesLocations_2.js"></script>
+        <script src="data/ProjectbyYear_3.js"></script>
+        <script src="data/ProjectbySize_4.js"></script>
+        <script src="data/ProjectbyVIS_5.js"></script>
         <script>
         var map = L.map('map', {
             zoomControl:true, maxZoom:28, minZoom:1
-        }).fitBounds([[4.462859342000277,-74.2689271777225],[4.855039165661253,-73.85766317772766]]);
+        }).fitBounds([[5.064965105333794,-77.11580918232713],[9.771122989265514,-72.180641182389]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -244,7 +249,135 @@
         });
         bounds_group.addLayer(layer_CityOutlines_1);
         map.addLayer(layer_CityOutlines_1);
-        function pop_ProjectbyYear_2(feature, layer) {
+        function pop_AmenitiesLocations_2(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">WKT</th>\
+                        <td>' + (feature.properties['WKT'] !== null ? autolinker.link(feature.properties['WKT'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">name</th>\
+                        <td>' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">description</th>\
+                        <td>' + (feature.properties['description'] !== null ? autolinker.link(feature.properties['description'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">City</th>\
+                        <td>' + (feature.properties['City'] !== null ? autolinker.link(feature.properties['City'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">LocationType</th>\
+                        <td>' + (feature.properties['LocationType'] !== null ? autolinker.link(feature.properties['LocationType'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['LATITUD'] !== null ? autolinker.link(feature.properties['LATITUD'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['LONGITUD'] !== null ? autolinker.link(feature.properties['LONGITUD'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_AmenitiesLocations_2_0(feature) {
+            switch(String(feature.properties['LocationType'])) {
+                case 'Biblioteca':
+                    return {
+                pane: 'pane_AmenitiesLocations_2',
+                shape: 'triangle',
+                radius: 5.6,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(125,206,212,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'Estacion Metro':
+                    return {
+                pane: 'pane_AmenitiesLocations_2',
+                shape: 'triangle',
+                radius: 5.6,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(218,165,60,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'Gobierno':
+                    return {
+                pane: 'pane_AmenitiesLocations_2',
+                shape: 'triangle',
+                radius: 5.6,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(144,112,234,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'Hospital':
+                    return {
+                pane: 'pane_AmenitiesLocations_2',
+                shape: 'triangle',
+                radius: 5.6,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(213,74,146,1.0)',
+                interactive: false,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_AmenitiesLocations_2');
+        map.getPane('pane_AmenitiesLocations_2').style.zIndex = 402;
+        map.getPane('pane_AmenitiesLocations_2').style['mix-blend-mode'] = 'normal';
+        var layer_AmenitiesLocations_2 = new L.geoJson(json_AmenitiesLocations_2, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_AmenitiesLocations_2',
+            layerName: 'layer_AmenitiesLocations_2',
+            pane: 'pane_AmenitiesLocations_2',
+            onEachFeature: pop_AmenitiesLocations_2,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_AmenitiesLocations_2_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_AmenitiesLocations_2);
+        map.addLayer(layer_AmenitiesLocations_2);
+        function pop_ProjectbyYear_3(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <th scope="row">fid</th>\
@@ -626,11 +759,11 @@
             popup.setContent(updatedContent);
         }
 
-        function style_ProjectbyYear_2_0(feature) {
+        function style_ProjectbyYear_3_0(feature) {
             switch(String(feature.properties['Completion_Date'])) {
                 case '2007':
                     return {
-                pane: 'pane_ProjectbyYear_2',
+                pane: 'pane_ProjectbyYear_3',
                 shape: 'diamond',
                 radius: 6.0,
                 opacity: 1,
@@ -647,7 +780,7 @@
                     break;
                 case '2008':
                     return {
-                pane: 'pane_ProjectbyYear_2',
+                pane: 'pane_ProjectbyYear_3',
                 shape: 'diamond',
                 radius: 6.0,
                 opacity: 1,
@@ -664,7 +797,7 @@
                     break;
                 case '2009':
                     return {
-                pane: 'pane_ProjectbyYear_2',
+                pane: 'pane_ProjectbyYear_3',
                 shape: 'diamond',
                 radius: 6.0,
                 opacity: 1,
@@ -681,7 +814,7 @@
                     break;
                 case '2010':
                     return {
-                pane: 'pane_ProjectbyYear_2',
+                pane: 'pane_ProjectbyYear_3',
                 shape: 'diamond',
                 radius: 6.0,
                 opacity: 1,
@@ -698,7 +831,7 @@
                     break;
                 case '2011':
                     return {
-                pane: 'pane_ProjectbyYear_2',
+                pane: 'pane_ProjectbyYear_3',
                 shape: 'diamond',
                 radius: 6.0,
                 opacity: 1,
@@ -715,7 +848,7 @@
                     break;
                 case '2012':
                     return {
-                pane: 'pane_ProjectbyYear_2',
+                pane: 'pane_ProjectbyYear_3',
                 shape: 'diamond',
                 radius: 6.0,
                 opacity: 1,
@@ -732,7 +865,7 @@
                     break;
                 case '2013':
                     return {
-                pane: 'pane_ProjectbyYear_2',
+                pane: 'pane_ProjectbyYear_3',
                 shape: 'diamond',
                 radius: 6.0,
                 opacity: 1,
@@ -749,7 +882,7 @@
                     break;
                 case '2014':
                     return {
-                pane: 'pane_ProjectbyYear_2',
+                pane: 'pane_ProjectbyYear_3',
                 shape: 'diamond',
                 radius: 6.0,
                 opacity: 1,
@@ -766,7 +899,7 @@
                     break;
                 case '2015':
                     return {
-                pane: 'pane_ProjectbyYear_2',
+                pane: 'pane_ProjectbyYear_3',
                 shape: 'diamond',
                 radius: 6.0,
                 opacity: 1,
@@ -783,7 +916,7 @@
                     break;
                 case '2016':
                     return {
-                pane: 'pane_ProjectbyYear_2',
+                pane: 'pane_ProjectbyYear_3',
                 shape: 'diamond',
                 radius: 6.0,
                 opacity: 1,
@@ -800,7 +933,7 @@
                     break;
                 case '2017':
                     return {
-                pane: 'pane_ProjectbyYear_2',
+                pane: 'pane_ProjectbyYear_3',
                 shape: 'diamond',
                 radius: 6.0,
                 opacity: 1,
@@ -817,7 +950,7 @@
                     break;
                 case '2018':
                     return {
-                pane: 'pane_ProjectbyYear_2',
+                pane: 'pane_ProjectbyYear_3',
                 shape: 'diamond',
                 radius: 6.0,
                 opacity: 1,
@@ -834,7 +967,7 @@
                     break;
                 case '2019':
                     return {
-                pane: 'pane_ProjectbyYear_2',
+                pane: 'pane_ProjectbyYear_3',
                 shape: 'diamond',
                 radius: 6.0,
                 opacity: 1,
@@ -851,7 +984,7 @@
                     break;
                 case '2020':
                     return {
-                pane: 'pane_ProjectbyYear_2',
+                pane: 'pane_ProjectbyYear_3',
                 shape: 'diamond',
                 radius: 6.0,
                 opacity: 1,
@@ -868,7 +1001,7 @@
                     break;
                 case '2021':
                     return {
-                pane: 'pane_ProjectbyYear_2',
+                pane: 'pane_ProjectbyYear_3',
                 shape: 'diamond',
                 radius: 6.0,
                 opacity: 1,
@@ -885,7 +1018,7 @@
                     break;
                 case '2022':
                     return {
-                pane: 'pane_ProjectbyYear_2',
+                pane: 'pane_ProjectbyYear_3',
                 shape: 'diamond',
                 radius: 6.0,
                 opacity: 1,
@@ -902,7 +1035,7 @@
                     break;
                 case '2023':
                     return {
-                pane: 'pane_ProjectbyYear_2',
+                pane: 'pane_ProjectbyYear_3',
                 shape: 'diamond',
                 radius: 6.0,
                 opacity: 1,
@@ -919,27 +1052,26 @@
                     break;
             }
         }
-        map.createPane('pane_ProjectbyYear_2');
-        map.getPane('pane_ProjectbyYear_2').style.zIndex = 402;
-        map.getPane('pane_ProjectbyYear_2').style['mix-blend-mode'] = 'normal';
-        var layer_ProjectbyYear_2 = new L.geoJson(json_ProjectbyYear_2, {
+        map.createPane('pane_ProjectbyYear_3');
+        map.getPane('pane_ProjectbyYear_3').style.zIndex = 403;
+        map.getPane('pane_ProjectbyYear_3').style['mix-blend-mode'] = 'normal';
+        var layer_ProjectbyYear_3 = new L.geoJson(json_ProjectbyYear_3, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_ProjectbyYear_2',
-            layerName: 'layer_ProjectbyYear_2',
-            pane: 'pane_ProjectbyYear_2',
-            onEachFeature: pop_ProjectbyYear_2,
+            dataVar: 'json_ProjectbyYear_3',
+            layerName: 'layer_ProjectbyYear_3',
+            pane: 'pane_ProjectbyYear_3',
+            onEachFeature: pop_ProjectbyYear_3,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.shapeMarker(latlng, style_ProjectbyYear_2_0(feature));
+                return L.shapeMarker(latlng, style_ProjectbyYear_3_0(feature));
             },
         });
-        bounds_group.addLayer(layer_ProjectbyYear_2);
-        map.addLayer(layer_ProjectbyYear_2);
-        function pop_ProjectbySize_3(feature, layer) {
+        bounds_group.addLayer(layer_ProjectbyYear_3);
+        function pop_ProjectbySize_4(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <th scope="row">fid</th>\
@@ -1324,11 +1456,11 @@
             popup.setContent(updatedContent);
         }
 
-        function style_ProjectbySize_3_0(feature) {
+        function style_ProjectbySize_4_0(feature) {
             switch(String(feature.properties['Size Category'])) {
                 case '0-100':
                     return {
-                pane: 'pane_ProjectbySize_3',
+                pane: 'pane_ProjectbySize_4',
                 radius: 4.0,
                 opacity: 1,
                 color: 'rgba(42,149,220,1.0)',
@@ -1344,7 +1476,7 @@
                     break;
                 case '101-250':
                     return {
-                pane: 'pane_ProjectbySize_3',
+                pane: 'pane_ProjectbySize_4',
                 radius: 6.0,
                 opacity: 1,
                 color: 'rgba(42,149,220,1.0)',
@@ -1360,7 +1492,7 @@
                     break;
                 case '251-500':
                     return {
-                pane: 'pane_ProjectbySize_3',
+                pane: 'pane_ProjectbySize_4',
                 radius: 9.0,
                 opacity: 1,
                 color: 'rgba(42,149,220,1.0)',
@@ -1376,7 +1508,7 @@
                     break;
                 case '501-1000':
                     return {
-                pane: 'pane_ProjectbySize_3',
+                pane: 'pane_ProjectbySize_4',
                 radius: 13.0,
                 opacity: 1,
                 color: 'rgba(42,149,220,1.0)',
@@ -1392,7 +1524,7 @@
                     break;
                 case '1001-3000':
                     return {
-                pane: 'pane_ProjectbySize_3',
+                pane: 'pane_ProjectbySize_4',
                 radius: 16.0,
                 opacity: 1,
                 color: 'rgba(42,149,220,1.0)',
@@ -1408,27 +1540,27 @@
                     break;
             }
         }
-        map.createPane('pane_ProjectbySize_3');
-        map.getPane('pane_ProjectbySize_3').style.zIndex = 403;
-        map.getPane('pane_ProjectbySize_3').style['mix-blend-mode'] = 'normal';
-        var layer_ProjectbySize_3 = new L.geoJson(json_ProjectbySize_3, {
+        map.createPane('pane_ProjectbySize_4');
+        map.getPane('pane_ProjectbySize_4').style.zIndex = 404;
+        map.getPane('pane_ProjectbySize_4').style['mix-blend-mode'] = 'normal';
+        var layer_ProjectbySize_4 = new L.geoJson(json_ProjectbySize_4, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_ProjectbySize_3',
-            layerName: 'layer_ProjectbySize_3',
-            pane: 'pane_ProjectbySize_3',
-            onEachFeature: pop_ProjectbySize_3,
+            dataVar: 'json_ProjectbySize_4',
+            layerName: 'layer_ProjectbySize_4',
+            pane: 'pane_ProjectbySize_4',
+            onEachFeature: pop_ProjectbySize_4,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_ProjectbySize_3_0(feature));
+                return L.circleMarker(latlng, style_ProjectbySize_4_0(feature));
             },
         });
-        bounds_group.addLayer(layer_ProjectbySize_3);
-        map.addLayer(layer_ProjectbySize_3);
-        function pop_ProjectbyVIS_4(feature, layer) {
+        bounds_group.addLayer(layer_ProjectbySize_4);
+        map.addLayer(layer_ProjectbySize_4);
+        function pop_ProjectbyVIS_5(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <th scope="row">fid</th>\
@@ -1810,11 +1942,11 @@
             popup.setContent(updatedContent);
         }
 
-        function style_ProjectbyVIS_4_0(feature) {
+        function style_ProjectbyVIS_5_0(feature) {
             switch(String(feature.properties['VIS_Type'])) {
                 case 'VIS':
                     return {
-                pane: 'pane_ProjectbyVIS_4',
+                pane: 'pane_ProjectbyVIS_5',
                 radius: 4.0,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
@@ -1830,7 +1962,7 @@
                     break;
                 case 'VIP':
                     return {
-                pane: 'pane_ProjectbyVIS_4',
+                pane: 'pane_ProjectbyVIS_5',
                 radius: 4.0,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
@@ -1846,7 +1978,7 @@
                     break;
                 case 'VIPA':
                     return {
-                pane: 'pane_ProjectbyVIS_4',
+                pane: 'pane_ProjectbyVIS_5',
                 radius: 4.0,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
@@ -1862,7 +1994,7 @@
                     break;
                 case 'VIS_Renov':
                     return {
-                pane: 'pane_ProjectbyVIS_4',
+                pane: 'pane_ProjectbyVIS_5',
                 radius: 4.0,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
@@ -1878,158 +2010,29 @@
                     break;
             }
         }
-        map.createPane('pane_ProjectbyVIS_4');
-        map.getPane('pane_ProjectbyVIS_4').style.zIndex = 404;
-        map.getPane('pane_ProjectbyVIS_4').style['mix-blend-mode'] = 'normal';
-        var layer_ProjectbyVIS_4 = new L.geoJson(json_ProjectbyVIS_4, {
+        map.createPane('pane_ProjectbyVIS_5');
+        map.getPane('pane_ProjectbyVIS_5').style.zIndex = 405;
+        map.getPane('pane_ProjectbyVIS_5').style['mix-blend-mode'] = 'normal';
+        var layer_ProjectbyVIS_5 = new L.geoJson(json_ProjectbyVIS_5, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_ProjectbyVIS_4',
-            layerName: 'layer_ProjectbyVIS_4',
-            pane: 'pane_ProjectbyVIS_4',
-            onEachFeature: pop_ProjectbyVIS_4,
+            dataVar: 'json_ProjectbyVIS_5',
+            layerName: 'layer_ProjectbyVIS_5',
+            pane: 'pane_ProjectbyVIS_5',
+            onEachFeature: pop_ProjectbyVIS_5,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_ProjectbyVIS_4_0(feature));
+                return L.circleMarker(latlng, style_ProjectbyVIS_5_0(feature));
             },
         });
-        var cluster_ProjectbyVIS_4 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+        var cluster_ProjectbyVIS_5 = new L.MarkerClusterGroup({showCoverageOnHover: false,
             spiderfyDistanceMultiplier: 2});
-        cluster_ProjectbyVIS_4.addLayer(layer_ProjectbyVIS_4);
+        cluster_ProjectbyVIS_5.addLayer(layer_ProjectbyVIS_5);
 
-        bounds_group.addLayer(layer_ProjectbyVIS_4);
-        cluster_ProjectbyVIS_4.addTo(map);
-        function pop_AmenitiesLocations_5(feature, layer) {
-            var popupContent = '<table>\
-                    <tr>\
-                        <th scope="row">WKT</th>\
-                        <td>' + (feature.properties['WKT'] !== null ? autolinker.link(feature.properties['WKT'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">name</th>\
-                        <td>' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">description</th>\
-                        <td>' + (feature.properties['description'] !== null ? autolinker.link(feature.properties['description'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">City</th>\
-                        <td>' + (feature.properties['City'] !== null ? autolinker.link(feature.properties['City'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">LocationType</th>\
-                        <td>' + (feature.properties['LocationType'] !== null ? autolinker.link(feature.properties['LocationType'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['LATITUD'] !== null ? autolinker.link(feature.properties['LATITUD'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['LONGITUD'] !== null ? autolinker.link(feature.properties['LONGITUD'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
-            var popup = layer.getPopup();
-            var content = popup.getContent();
-            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
-            popup.setContent(updatedContent);
-        }
-
-        function style_AmenitiesLocations_5_0(feature) {
-            switch(String(feature.properties['LocationType'])) {
-                case 'Biblioteca':
-                    return {
-                pane: 'pane_AmenitiesLocations_5',
-                shape: 'triangle',
-                radius: 5.6,
-                opacity: 1,
-                color: 'rgba(0,0,0,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 2.0,
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(125,206,212,1.0)',
-                interactive: false,
-            }
-                    break;
-                case 'Estacion Metro':
-                    return {
-                pane: 'pane_AmenitiesLocations_5',
-                shape: 'triangle',
-                radius: 5.6,
-                opacity: 1,
-                color: 'rgba(0,0,0,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 2.0,
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(218,165,60,1.0)',
-                interactive: false,
-            }
-                    break;
-                case 'Gobierno':
-                    return {
-                pane: 'pane_AmenitiesLocations_5',
-                shape: 'triangle',
-                radius: 5.6,
-                opacity: 1,
-                color: 'rgba(0,0,0,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 2.0,
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(144,112,234,1.0)',
-                interactive: false,
-            }
-                    break;
-                case 'Hospital':
-                    return {
-                pane: 'pane_AmenitiesLocations_5',
-                shape: 'triangle',
-                radius: 5.6,
-                opacity: 1,
-                color: 'rgba(0,0,0,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 2.0,
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(213,74,146,1.0)',
-                interactive: false,
-            }
-                    break;
-            }
-        }
-        map.createPane('pane_AmenitiesLocations_5');
-        map.getPane('pane_AmenitiesLocations_5').style.zIndex = 405;
-        map.getPane('pane_AmenitiesLocations_5').style['mix-blend-mode'] = 'normal';
-        var layer_AmenitiesLocations_5 = new L.geoJson(json_AmenitiesLocations_5, {
-            attribution: '',
-            interactive: false,
-            dataVar: 'json_AmenitiesLocations_5',
-            layerName: 'layer_AmenitiesLocations_5',
-            pane: 'pane_AmenitiesLocations_5',
-            onEachFeature: pop_AmenitiesLocations_5,
-            pointToLayer: function (feature, latlng) {
-                var context = {
-                    feature: feature,
-                    variables: {}
-                };
-                return L.shapeMarker(latlng, style_AmenitiesLocations_5_0(feature));
-            },
-        });
-        bounds_group.addLayer(layer_AmenitiesLocations_5);
-        map.addLayer(layer_AmenitiesLocations_5);
+        bounds_group.addLayer(layer_ProjectbyVIS_5);
         var osmGeocoder = new L.Control.Geocoder({
             collapsed: true,
             position: 'topleft',
@@ -2042,10 +2045,10 @@
         .title += 'Search for a place';
         var baseMaps = {};
         var overlaysTree = [
-            {label: 'Amenities Locations<br /><table><tr><td style="text-align: center;"><img src="legend/AmenitiesLocations_5_Biblioteca0.png" /></td><td>Biblioteca</td></tr><tr><td style="text-align: center;"><img src="legend/AmenitiesLocations_5_EstacionMetro1.png" /></td><td>Estacion Metro</td></tr><tr><td style="text-align: center;"><img src="legend/AmenitiesLocations_5_Gobierno2.png" /></td><td>Gobierno</td></tr><tr><td style="text-align: center;"><img src="legend/AmenitiesLocations_5_Hospital3.png" /></td><td>Hospital</td></tr></table>', layer: layer_AmenitiesLocations_5},
-            {label: 'Project by VIS<br /><table><tr><td style="text-align: center;"><img src="legend/ProjectbyVIS_4_VIS0.png" /></td><td>VIS</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyVIS_4_VIP1.png" /></td><td>VIP</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyVIS_4_VIPA2.png" /></td><td>VIPA</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyVIS_4_VISRenov3.png" /></td><td>VIS_Renov</td></tr></table>', layer: cluster_ProjectbyVIS_4},
-            {label: 'Project by Size<br /><table><tr><td style="text-align: center;"><img src="legend/ProjectbySize_3_01000.png" /></td><td>0-100</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbySize_3_1012501.png" /></td><td>101-250</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbySize_3_2515002.png" /></td><td>251-500</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbySize_3_50110003.png" /></td><td>501-1000</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbySize_3_100130004.png" /></td><td>1001-3000</td></tr></table>', layer: layer_ProjectbySize_3},
-            {label: 'Project by Year<br /><table><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_2_20070.png" /></td><td>2007</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_2_20081.png" /></td><td>2008</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_2_20092.png" /></td><td>2009</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_2_20103.png" /></td><td>2010</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_2_20114.png" /></td><td>2011</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_2_20125.png" /></td><td>2012</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_2_20136.png" /></td><td>2013</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_2_20147.png" /></td><td>2014</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_2_20158.png" /></td><td>2015</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_2_20169.png" /></td><td>2016</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_2_201710.png" /></td><td>2017</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_2_201811.png" /></td><td>2018</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_2_201912.png" /></td><td>2019</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_2_202013.png" /></td><td>2020</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_2_202114.png" /></td><td>2021</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_2_202215.png" /></td><td>2022</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_2_202316.png" /></td><td>2023</td></tr></table>', layer: layer_ProjectbyYear_2},
+            {label: 'Project by VIS<br /><table><tr><td style="text-align: center;"><img src="legend/ProjectbyVIS_5_VIS0.png" /></td><td>VIS</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyVIS_5_VIP1.png" /></td><td>VIP</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyVIS_5_VIPA2.png" /></td><td>VIPA</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyVIS_5_VISRenov3.png" /></td><td>VIS_Renov</td></tr></table>', layer: cluster_ProjectbyVIS_5},
+            {label: 'Project by Size<br /><table><tr><td style="text-align: center;"><img src="legend/ProjectbySize_4_01000.png" /></td><td>0-100</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbySize_4_1012501.png" /></td><td>101-250</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbySize_4_2515002.png" /></td><td>251-500</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbySize_4_50110003.png" /></td><td>501-1000</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbySize_4_100130004.png" /></td><td>1001-3000</td></tr></table>', layer: layer_ProjectbySize_4},
+            {label: 'Project by Year<br /><table><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_3_20070.png" /></td><td>2007</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_3_20081.png" /></td><td>2008</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_3_20092.png" /></td><td>2009</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_3_20103.png" /></td><td>2010</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_3_20114.png" /></td><td>2011</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_3_20125.png" /></td><td>2012</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_3_20136.png" /></td><td>2013</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_3_20147.png" /></td><td>2014</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_3_20158.png" /></td><td>2015</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_3_20169.png" /></td><td>2016</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_3_201710.png" /></td><td>2017</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_3_201811.png" /></td><td>2018</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_3_201912.png" /></td><td>2019</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_3_202013.png" /></td><td>2020</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_3_202114.png" /></td><td>2021</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_3_202215.png" /></td><td>2022</td></tr><tr><td style="text-align: center;"><img src="legend/ProjectbyYear_3_202316.png" /></td><td>2023</td></tr></table>', layer: layer_ProjectbyYear_3},
+            {label: 'Amenities Locations<br /><table><tr><td style="text-align: center;"><img src="legend/AmenitiesLocations_2_Biblioteca0.png" /></td><td>Biblioteca</td></tr><tr><td style="text-align: center;"><img src="legend/AmenitiesLocations_2_EstacionMetro1.png" /></td><td>Estacion Metro</td></tr><tr><td style="text-align: center;"><img src="legend/AmenitiesLocations_2_Gobierno2.png" /></td><td>Gobierno</td></tr><tr><td style="text-align: center;"><img src="legend/AmenitiesLocations_2_Hospital3.png" /></td><td>Hospital</td></tr></table>', layer: layer_AmenitiesLocations_2},
             {label: '<img src="legend/CityOutlines_1.png" /> CityOutlines', layer: layer_CityOutlines_1},
             {label: "OSM Standard", layer: layer_OSMStandard_0},]
         var lay = L.control.layers.tree(null, overlaysTree,{
@@ -2059,6 +2062,161 @@
         });
         lay.addTo(map);
         setBounds();
+        var mapDiv = document.getElementById('map');
+        var row = document.createElement('div');
+        row.className="row";
+        row.id="all";
+        row.style.height = "100%";
+        var col1 = document.createElement('div');
+        col1.className="col9";
+        col1.id = "mapWindow";
+        col1.style.height = "99%";
+        col1.style.width = "80%";
+        col1.style.display = "inline-block";
+        var col2 = document.createElement('div');
+        col2.className="col3";
+        col2.id = "menu";
+        col2.style.display = "inline-block";
+        mapDiv.parentNode.insertBefore(row, mapDiv);
+        document.getElementById("all").appendChild(col1);
+        document.getElementById("all").appendChild(col2);
+        col1.appendChild(mapDiv)
+        var Filters = {"Completion_Date": "str"};
+        function filterFunc() {
+          map.eachLayer(function(lyr){
+          if ("options" in lyr && "dataVar" in lyr["options"]){
+            features = this[lyr["options"]["dataVar"]].features.slice(0);
+            try{
+              for (key in Filters){
+                keyS = key.replace(/[^a-zA-Z0-9_]/g, "")
+                if (Filters[key] == "str" || Filters[key] == "bool"){
+                  var selection = [];
+                  var options = document.getElementById("sel_" + keyS).options
+                  for (var i=0; i < options.length; i++) {
+                    if (options[i].selected) selection.push(options[i].value);
+                  }
+                    try{
+                      if (key in features[0].properties){
+                        for (i = features.length - 1;
+                          i >= 0; --i){
+                          if (selection.indexOf(
+                          features[i].properties[key])<0
+                          && selection.length>0) {
+                          features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                  }
+                }
+                if (Filters[key] == "int"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (parseInt(features[i].properties[key])
+                          < sliderVals[0]
+                          || parseInt(features[i].properties[key])
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "real"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (features[i].properties[key]
+                          < sliderVals[0]
+                          || features[i].properties[key]
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "date"
+                  || Filters[key] == "datetime"
+                  || Filters[key] == "time"){
+                  try{
+                    if (key in features[0].properties){
+                      HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
+                      startdate = document.getElementById("dat_" +
+                        HTMLkey + "_date1").value.replace(" ", "T");
+                      enddate = document.getElementById("dat_" +
+                        HTMLkey + "_date2").value.replace(" ", "T");
+                      for (i = features.length - 1; i >= 0; --i){
+                        if (features[i].properties[key] < startdate
+                          || features[i].properties[key] > enddate){
+                          features.splice(i,1);
+                        }
+                      }
+                    }
+                  } catch(err){
+                  }
+                }
+              }
+            } catch(err){
+            }
+          this[lyr["options"]["layerName"]].clearLayers();
+          this[lyr["options"]["layerName"]].addData(features);
+          }
+          })
+        }
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_Completion_Date = document.createElement('div');
+            div_Completion_Date.id = "div_Completion_Date";
+            div_Completion_Date.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Completion_Date);
+            sel_Completion_Date = document.createElement('select');
+            sel_Completion_Date.multiple = true;
+            sel_Completion_Date.size = 10;
+            sel_Completion_Date.id = "sel_Completion_Date";
+            var Completion_Date_options_str = "<option value='' unselected></option>";
+            sel_Completion_Date.onchange = function(){filterFunc()};
+            Completion_Date_options_str  += '<option value="2007">2007</option>';
+            Completion_Date_options_str  += '<option value="2008">2008</option>';
+            Completion_Date_options_str  += '<option value="2009">2009</option>';
+            Completion_Date_options_str  += '<option value="2010">2010</option>';
+            Completion_Date_options_str  += '<option value="2011">2011</option>';
+            Completion_Date_options_str  += '<option value="2012">2012</option>';
+            Completion_Date_options_str  += '<option value="2013">2013</option>';
+            Completion_Date_options_str  += '<option value="2014">2014</option>';
+            Completion_Date_options_str  += '<option value="2015">2015</option>';
+            Completion_Date_options_str  += '<option value="2016">2016</option>';
+            Completion_Date_options_str  += '<option value="2017">2017</option>';
+            Completion_Date_options_str  += '<option value="2018">2018</option>';
+            Completion_Date_options_str  += '<option value="2019">2019</option>';
+            Completion_Date_options_str  += '<option value="2020">2020</option>';
+            Completion_Date_options_str  += '<option value="2021">2021</option>';
+            Completion_Date_options_str  += '<option value="2022">2022</option>';
+            Completion_Date_options_str  += '<option value="2023">2023</option>';
+            sel_Completion_Date.innerHTML = Completion_Date_options_str;
+            div_Completion_Date.appendChild(sel_Completion_Date);
+            var lab_Completion_Date = document.createElement('div');
+            lab_Completion_Date.innerHTML = 'Completion_Date';
+            lab_Completion_Date.className = 'filterlabel';
+            div_Completion_Date.appendChild(lab_Completion_Date);
+            var reset_Completion_Date = document.createElement('div');
+            reset_Completion_Date.innerHTML = 'clear filter';
+            reset_Completion_Date.className = 'filterlabel';
+            reset_Completion_Date.onclick = function() {
+                var options = document.getElementById("sel_Completion_Date").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Completion_Date.appendChild(reset_Completion_Date);
         </script>
     </body>
 </html>
