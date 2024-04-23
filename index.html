@@ -12,8 +12,6 @@
         <link rel="stylesheet" href="css/fontawesome-all.min.css">
         <link rel="stylesheet" href="css/MarkerCluster.css">
         <link rel="stylesheet" href="css/MarkerCluster.Default.css">
-        <link rel="stylesheet" href="css/filter.css">
-<link rel="stylesheet" href="css/nouislider.min.css">
         <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
         <link rel="stylesheet" href="css/leaflet-measure.css">
         <style>
@@ -43,9 +41,6 @@
         <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
         <script src="js/leaflet-measure.js"></script>
         <script src="js/leaflet.markercluster.js"></script>
-        <script src="js/tailDT.js"></script>
-<script src="js/nouislider.min.js"></script>
-<script src="js/wNumb.js"></script>
         <script src="data/CityOutlines_1.js"></script>
         <script src="data/AmenitiesLocations_2.js"></script>
         <script src="data/ProjectbyYear_3.js"></script>
@@ -55,7 +50,7 @@
         <script>
         var map = L.map('map', {
             zoomControl:true, maxZoom:28, minZoom:1
-        }).fitBounds([[5.064965105333794,-77.11580918232713],[9.771122989265514,-72.180641182389]]);
+        }).fitBounds([[3.0954781076786717,-78.87918707557648],[12.507793875542113,-69.00885107570022]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -377,7 +372,6 @@
             },
         });
         bounds_group.addLayer(layer_AmenitiesLocations_2);
-        map.addLayer(layer_AmenitiesLocations_2);
         function pop_ProjectbyYear_3(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
@@ -1072,7 +1066,6 @@
             },
         });
         bounds_group.addLayer(layer_ProjectbyYear_3);
-        map.addLayer(layer_ProjectbyYear_3);
         function pop_ProjectbySize_4(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
@@ -1561,7 +1554,6 @@
             },
         });
         bounds_group.addLayer(layer_ProjectbySize_4);
-        map.addLayer(layer_ProjectbySize_4);
         function pop_ProjectbyVIS_5(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
@@ -2031,7 +2023,6 @@
             },
         });
         bounds_group.addLayer(layer_ProjectbyVIS_5);
-        map.addLayer(layer_ProjectbyVIS_5);
         function pop_ProjectClusters_6(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
@@ -2324,17 +2315,17 @@
         function style_ProjectClusters_6_0() {
             return {
                 pane: 'pane_ProjectClusters_6',
-                radius: 4.0,
+                radius: 2.0,
                 opacity: 1,
-                color: 'rgba(35,35,35,1.0)',
+                color: 'rgba(255,255,255,0.0)',
                 dashArray: '',
                 lineCap: 'butt',
                 lineJoin: 'miter',
-                weight: 1,
+                weight: 2.0,
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(114,155,111,1.0)',
-                interactive: false,
+                fillColor: 'rgba(0,0,0,0.0)',
+                interactive: true,
             }
         }
         map.createPane('pane_ProjectClusters_6');
@@ -2342,7 +2333,7 @@
         map.getPane('pane_ProjectClusters_6').style['mix-blend-mode'] = 'normal';
         var layer_ProjectClusters_6 = new L.geoJson(json_ProjectClusters_6, {
             attribution: '',
-            interactive: false,
+            interactive: true,
             dataVar: 'json_ProjectClusters_6',
             layerName: 'layer_ProjectClusters_6',
             pane: 'pane_ProjectClusters_6',
@@ -2360,6 +2351,7 @@
         cluster_ProjectClusters_6.addLayer(layer_ProjectClusters_6);
 
         bounds_group.addLayer(layer_ProjectClusters_6);
+        cluster_ProjectClusters_6.addTo(map);
         var osmGeocoder = new L.Control.Geocoder({
             collapsed: true,
             position: 'topleft',
@@ -2390,161 +2382,6 @@
         });
         lay.addTo(map);
         setBounds();
-        var mapDiv = document.getElementById('map');
-        var row = document.createElement('div');
-        row.className="row";
-        row.id="all";
-        row.style.height = "100%";
-        var col1 = document.createElement('div');
-        col1.className="col9";
-        col1.id = "mapWindow";
-        col1.style.height = "99%";
-        col1.style.width = "80%";
-        col1.style.display = "inline-block";
-        var col2 = document.createElement('div');
-        col2.className="col3";
-        col2.id = "menu";
-        col2.style.display = "inline-block";
-        mapDiv.parentNode.insertBefore(row, mapDiv);
-        document.getElementById("all").appendChild(col1);
-        document.getElementById("all").appendChild(col2);
-        col1.appendChild(mapDiv)
-        var Filters = {"Completion_Date": "str"};
-        function filterFunc() {
-          map.eachLayer(function(lyr){
-          if ("options" in lyr && "dataVar" in lyr["options"]){
-            features = this[lyr["options"]["dataVar"]].features.slice(0);
-            try{
-              for (key in Filters){
-                keyS = key.replace(/[^a-zA-Z0-9_]/g, "")
-                if (Filters[key] == "str" || Filters[key] == "bool"){
-                  var selection = [];
-                  var options = document.getElementById("sel_" + keyS).options
-                  for (var i=0; i < options.length; i++) {
-                    if (options[i].selected) selection.push(options[i].value);
-                  }
-                    try{
-                      if (key in features[0].properties){
-                        for (i = features.length - 1;
-                          i >= 0; --i){
-                          if (selection.indexOf(
-                          features[i].properties[key])<0
-                          && selection.length>0) {
-                          features.splice(i,1);
-                          }
-                        }
-                      }
-                    } catch(err){
-                  }
-                }
-                if (Filters[key] == "int"){
-                  sliderVals =  document.getElementById(
-                    "div_" + keyS).noUiSlider.get();
-                  try{
-                    if (key in features[0].properties){
-                    for (i = features.length - 1; i >= 0; --i){
-                      if (parseInt(features[i].properties[key])
-                          < sliderVals[0]
-                          || parseInt(features[i].properties[key])
-                          > sliderVals[1]){
-                            features.splice(i,1);
-                          }
-                        }
-                      }
-                    } catch(err){
-                    }
-                  }
-                if (Filters[key] == "real"){
-                  sliderVals =  document.getElementById(
-                    "div_" + keyS).noUiSlider.get();
-                  try{
-                    if (key in features[0].properties){
-                    for (i = features.length - 1; i >= 0; --i){
-                      if (features[i].properties[key]
-                          < sliderVals[0]
-                          || features[i].properties[key]
-                          > sliderVals[1]){
-                            features.splice(i,1);
-                          }
-                        }
-                      }
-                    } catch(err){
-                    }
-                  }
-                if (Filters[key] == "date"
-                  || Filters[key] == "datetime"
-                  || Filters[key] == "time"){
-                  try{
-                    if (key in features[0].properties){
-                      HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
-                      startdate = document.getElementById("dat_" +
-                        HTMLkey + "_date1").value.replace(" ", "T");
-                      enddate = document.getElementById("dat_" +
-                        HTMLkey + "_date2").value.replace(" ", "T");
-                      for (i = features.length - 1; i >= 0; --i){
-                        if (features[i].properties[key] < startdate
-                          || features[i].properties[key] > enddate){
-                          features.splice(i,1);
-                        }
-                      }
-                    }
-                  } catch(err){
-                  }
-                }
-              }
-            } catch(err){
-            }
-          this[lyr["options"]["layerName"]].clearLayers();
-          this[lyr["options"]["layerName"]].addData(features);
-          }
-          })
-        }
-            document.getElementById("menu").appendChild(
-                document.createElement("div"));
-            var div_Completion_Date = document.createElement('div');
-            div_Completion_Date.id = "div_Completion_Date";
-            div_Completion_Date.className= "filterselect";
-            document.getElementById("menu").appendChild(div_Completion_Date);
-            sel_Completion_Date = document.createElement('select');
-            sel_Completion_Date.multiple = true;
-            sel_Completion_Date.size = 10;
-            sel_Completion_Date.id = "sel_Completion_Date";
-            var Completion_Date_options_str = "<option value='' unselected></option>";
-            sel_Completion_Date.onchange = function(){filterFunc()};
-            Completion_Date_options_str  += '<option value="2007">2007</option>';
-            Completion_Date_options_str  += '<option value="2008">2008</option>';
-            Completion_Date_options_str  += '<option value="2009">2009</option>';
-            Completion_Date_options_str  += '<option value="2010">2010</option>';
-            Completion_Date_options_str  += '<option value="2011">2011</option>';
-            Completion_Date_options_str  += '<option value="2012">2012</option>';
-            Completion_Date_options_str  += '<option value="2013">2013</option>';
-            Completion_Date_options_str  += '<option value="2014">2014</option>';
-            Completion_Date_options_str  += '<option value="2015">2015</option>';
-            Completion_Date_options_str  += '<option value="2016">2016</option>';
-            Completion_Date_options_str  += '<option value="2017">2017</option>';
-            Completion_Date_options_str  += '<option value="2018">2018</option>';
-            Completion_Date_options_str  += '<option value="2019">2019</option>';
-            Completion_Date_options_str  += '<option value="2020">2020</option>';
-            Completion_Date_options_str  += '<option value="2021">2021</option>';
-            Completion_Date_options_str  += '<option value="2022">2022</option>';
-            Completion_Date_options_str  += '<option value="2023">2023</option>';
-            sel_Completion_Date.innerHTML = Completion_Date_options_str;
-            div_Completion_Date.appendChild(sel_Completion_Date);
-            var lab_Completion_Date = document.createElement('div');
-            lab_Completion_Date.innerHTML = 'Completion_Date';
-            lab_Completion_Date.className = 'filterlabel';
-            div_Completion_Date.appendChild(lab_Completion_Date);
-            var reset_Completion_Date = document.createElement('div');
-            reset_Completion_Date.innerHTML = 'clear filter';
-            reset_Completion_Date.className = 'filterlabel';
-            reset_Completion_Date.onclick = function() {
-                var options = document.getElementById("sel_Completion_Date").options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                filterFunc();
-            };
-            div_Completion_Date.appendChild(reset_Completion_Date);
         </script>
     </body>
 </html>
